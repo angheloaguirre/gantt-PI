@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap');
+@import 'tailwindcss';
+
+/* ── Base ── */
+:root {
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, .font-mono,
+input[type="date"],
+select {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+/* ── Scrollbars — hide by default, thin on hover ── */
+.gantt-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db transparent;
+}
+.gantt-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.gantt-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.gantt-scroll::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+/* ── Date inputs ── */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.4;
+  cursor: pointer;
+  width: 12px;
+  height: 12px;
+}
+
+/* ── Select resets ── */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ── Print styles ── */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 12mm;
+  }
+
+  html, body {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  #root {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Make the split-screen main layout disappear */
+  main {
+    display: none !important;
+  }
+
+  /* Gantt in print: expand to full page width, bars stay proportional (% positioning) */
+  #gantt-scroll {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  #gantt-scroll > div {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Sticky header doesn't work in print — make it static */
+  #gantt-scroll .sticky {
+    position: static !important;
+  }
+}
