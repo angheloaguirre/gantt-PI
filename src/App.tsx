@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useActivities } from "./hooks/useActivities";
-import Toolbar from "./components/Toolbar";
-import ActivityTable from "./components/ActivityTable";
-import GanttChart from "./components/GanttChart";
-import { PHASE_META, PHASES } from "./types";
+import { useState } from "react"
+import { useActivities } from "./hooks/useActivities"
+import Toolbar from "./components/Toolbar"
+import ActivityTable from "./components/ActivityTable"
+import GanttChart from "./components/GanttChart"
+import { PHASE_META, PHASES } from "./types"
 
 export default function App() {
   const {
@@ -14,9 +14,9 @@ export default function App() {
     clearAll,
     importCSV,
     downloadTemplate,
-  } = useActivities();
+  } = useActivities()
 
-  const [projectName, setProjectName] = useState("Cronograma PI");
+  const [projectName, setProjectName] = useState("Cronograma PI")
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
@@ -48,7 +48,7 @@ export default function App() {
 
         {/* Right — Gantt */}
         <div className="flex-1 flex flex-col min-w-0">
-          <GanttChart activities={activities} />
+          <GanttChart activities={activities} onUpdate={updateActivity} />
         </div>
       </main>
 
@@ -71,14 +71,15 @@ export default function App() {
                   year: "numeric",
                 })}
                 {" · "}
-                {activities.length} actividad{activities.length !== 1 ? "es" : ""}
+                {activities.length} actividad
+                {activities.length !== 1 ? "es" : ""}
               </p>
             </div>
 
             {/* Phase legend */}
             <div className="flex gap-2 flex-wrap justify-end">
               {PHASES.map((p) => {
-                const m = PHASE_META[p];
+                const m = PHASE_META[p]
                 return (
                   <span
                     key={p}
@@ -87,7 +88,7 @@ export default function App() {
                   >
                     {p}
                   </span>
-                );
+                )
               })}
             </div>
           </div>
@@ -96,19 +97,21 @@ export default function App() {
           <table className="w-full border-collapse text-xs mb-8">
             <thead>
               <tr style={{ backgroundColor: "#0A0A0A", color: "#fff" }}>
-                {["#", "Actividad", "Fase", "Inicio", "Fin"].map((h) => (
-                  <th
-                    key={h}
-                    className="text-left px-3 py-2 font-mono uppercase tracking-wider"
-                  >
-                    {h}
-                  </th>
-                ))}
+                {["#", "Actividad", "Fase", "Responsable", "Inicio", "Fin"].map(
+                  (h) => (
+                    <th
+                      key={h}
+                      className="text-left px-3 py-2 font-mono uppercase tracking-wider"
+                    >
+                      {h}
+                    </th>
+                  ),
+                )}
               </tr>
             </thead>
             <tbody>
               {activities.map((a, i) => {
-                const m = PHASE_META[a.phase];
+                const m = PHASE_META[a.phase]
                 return (
                   <tr
                     key={a.id}
@@ -117,7 +120,9 @@ export default function App() {
                       borderBottom: "1px solid #E5E7EB",
                     }}
                   >
-                    <td className="px-3 py-1.5 font-mono text-gray-400">{i + 1}</td>
+                    <td className="px-3 py-1.5 font-mono text-gray-400">
+                      {i + 1}
+                    </td>
                     <td className="px-3 py-1.5 font-sans">{a.name}</td>
                     <td className="px-3 py-1.5">
                       <span
@@ -127,10 +132,11 @@ export default function App() {
                         {a.phase}
                       </span>
                     </td>
+                    <td className="px-3 py-1.5 font-mono">{a.responsable}</td>
                     <td className="px-3 py-1.5 font-mono">{a.startDate}</td>
                     <td className="px-3 py-1.5 font-mono">{a.endDate}</td>
                   </tr>
-                );
+                )
               })}
             </tbody>
           </table>
@@ -143,5 +149,5 @@ export default function App() {
         </div>
       </div>
     </div>
-  );
+  )
 }

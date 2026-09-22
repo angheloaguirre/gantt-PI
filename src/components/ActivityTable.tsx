@@ -1,61 +1,81 @@
-import { useEffect, useRef } from "react";
-import { Activity, Phase, PHASES, PHASE_META } from "../types";
+import { useEffect, useRef } from "react"
+import {
+  Activity,
+  Phase,
+  PHASES,
+  PHASE_META,
+  Responsable,
+  RESPONSIBLES,
+} from "../types"
 
-const ROW_H = 40;
+const ROW_H = 40
 
 interface Props {
-  activities: Activity[];
-  onUpdate: (id: string, patch: Partial<Omit<Activity, "id">>) => void;
-  onDelete: (id: string) => void;
+  activities: Activity[]
+  onUpdate: (id: string, patch: Partial<Omit<Activity, "id">>) => void
+  onDelete: (id: string) => void
 }
 
-export default function ActivityTable({ activities, onUpdate, onDelete }: Props) {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const prevLen = useRef(activities.length);
+export default function ActivityTable({
+  activities,
+  onUpdate,
+  onDelete,
+}: Props) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const prevLen = useRef(activities.length)
 
   // Scroll to bottom whenever a new row is added
   useEffect(() => {
     if (activities.length > prevLen.current) {
       requestAnimationFrame(() => {
-        const el = scrollRef.current;
-        if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-      });
+        const el = scrollRef.current
+        if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
+      })
     }
-    prevLen.current = activities.length;
-  }, [activities.length]);
+    prevLen.current = activities.length
+  }, [activities.length])
 
   return (
-    <div ref={scrollRef} className="h-full overflow-y-auto overflow-x-hidden gantt-scroll">
+    <div
+      ref={scrollRef}
+      className="h-full overflow-y-auto overflow-x-hidden gantt-scroll"
+    >
       <table className="w-full border-collapse text-sm">
         <thead className="sticky top-0 z-10">
           <tr style={{ height: ROW_H + 8, backgroundColor: "#0A0A0A" }}>
-            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[45%]">
+            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[25%]">
               Actividad
             </th>
-            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[22%]">
+            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[19%]">
               Fase
             </th>
-            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[15%]">
+            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[17%]">
+              Responsable
+            </th>
+            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[17.5%]">
               Inicio
             </th>
-            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[15%]">
+            <th className="text-left px-3 font-mono text-[10px] tracking-widest uppercase text-white border-r border-white/10 w-[17.5%]">
               Fin
             </th>
-            <th className="w-[3%]" />
+            <th className="w-[4%]" />
           </tr>
         </thead>
         <tbody>
           {activities.length === 0 && (
             <tr>
-              <td colSpan={5} className="text-center text-gray-400 font-mono text-xs py-16">
+              <td
+                colSpan={6}
+                className="text-center text-gray-400 font-mono text-xs py-16"
+              >
                 Sin actividades — agrega una para comenzar.
               </td>
             </tr>
           )}
           {activities.map((a, i) => {
-            const meta = PHASE_META[a.phase];
+            const meta = PHASE_META[a.phase]
             const dateError =
-              a.startDate && a.endDate && a.endDate < a.startDate;
+              a.startDate && a.endDate && a.endDate < a.startDate
 
             return (
               <tr
@@ -100,6 +120,26 @@ export default function ActivityTable({ activities, onUpdate, onDelete }: Props)
                   </span>
                 </td>
 
+                {/* Responsable */}
+                <td className="px-2 border-r border-gray-100">
+                  <select
+                    className="w-full bg-transparent outline-none font-mono text-[11px] text-gray-700 cursor-pointer"
+                    value={a.responsable}
+                    onChange={(e) =>
+                      onUpdate(a.id, {
+                        responsable: e.target.value as Responsable,
+                      })
+                    }
+                    aria-label={`Responsable de ${a.name}`}
+                  >
+                    {RESPONSIBLES.map((responsable) => (
+                      <option key={responsable} value={responsable}>
+                        {responsable}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+
                 {/* Inicio */}
                 <td className="px-2 border-r border-gray-100">
                   <input
@@ -108,7 +148,9 @@ export default function ActivityTable({ activities, onUpdate, onDelete }: Props)
                       dateError ? "ring-1 ring-red-400 text-red-500" : ""
                     }`}
                     value={a.startDate}
-                    onChange={(e) => onUpdate(a.id, { startDate: e.target.value })}
+                    onChange={(e) =>
+                      onUpdate(a.id, { startDate: e.target.value })
+                    }
                   />
                 </td>
 
@@ -120,7 +162,9 @@ export default function ActivityTable({ activities, onUpdate, onDelete }: Props)
                       dateError ? "ring-1 ring-red-400 text-red-500" : ""
                     }`}
                     value={a.endDate}
-                    onChange={(e) => onUpdate(a.id, { endDate: e.target.value })}
+                    onChange={(e) =>
+                      onUpdate(a.id, { endDate: e.target.value })
+                    }
                   />
                 </td>
 
@@ -135,10 +179,10 @@ export default function ActivityTable({ activities, onUpdate, onDelete }: Props)
                   </button>
                 </td>
               </tr>
-            );
+            )
           })}
         </tbody>
       </table>
     </div>
-  );
+  )
 }
