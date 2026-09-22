@@ -16,7 +16,7 @@ export default function App() {
     downloadTemplate,
   } = useActivities();
 
-  const [projectName, setProjectName] = useState("Cronograma PI");
+  const [projectName, setProjectName] = useState("Cronograma PI uwu");
 
   return (
     <div className="flex flex-col h-screen bg-white overflow-hidden">
