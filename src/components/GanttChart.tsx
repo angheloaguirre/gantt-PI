@@ -39,7 +39,7 @@ function toDateString(date: Date) {
 }
 
 function monthsInRange(start: Date, end: Date) {
-  const months: { label: string startDay: number days: number }[] = []
+  const months: { label: string; startDay: number; days: number }[] = []
   let cur = new Date(start.getFullYear(), start.getMonth(), 1)
   while (cur <= end) {
     const next = new Date(cur.getFullYear(), cur.getMonth() + 1, 1)
